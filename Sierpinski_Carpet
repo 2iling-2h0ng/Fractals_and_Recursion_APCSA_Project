@@ -1,0 +1,102 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.awt.Point;
+
+public class Sier2 extends Application 
+{
+
+    public static void main(String[] args) 
+    {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Get a canvas to draw on
+        Canvas canvas = new Canvas(300, 300);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        //divides by three each time
+        int length=300;
+        int width=300;
+        Point p1=new Point(0,0);
+        Point p2=new Point(0,300);
+        Point p4=new Point(300,0);
+        Point p3=new Point(300,300);
+
+        //draw a single square
+        drawSquare(p1, gc,length, width);
+
+        //Pass in the three points to be subdvided and what
+        //to draw on.
+        //Also pass in how many recusive layers deep to go.
+        squareSubdivide(p1,gc,3, length, width);
+
+        //add the canvas to a pane, add pane to a scene, add scene to the stage
+        Group rootPane = new Group();
+        rootPane.getChildren().add(canvas);
+        Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Recursion");
+        primaryStage.show();
+    }
+
+    
+    //Recieves a value for 8 which indicates how many more 
+    //recursive calls to do
+    public void squareSubdivide(Point p1,GraphicsContext g, int x, int length, int width)
+    {
+        int l=length;
+        int w=width;
+        
+        Point one=new Point((int)p1.getX(), (int)p1.getY());
+        Point two=new Point((int)(p1.getX()+l),(int)p1.getY());
+        Point three=new Point((int)(p1.getX()+l*2), (int)p1.getY());
+        
+        Point four=new Point((int)(p1.getX()), (int)(p1.getY()+w));
+        //five is the middle square
+        Point six=new Point((int)(p1.getX()+l*2),(int)(p1.getY()+w));
+        
+        Point seven=new Point((int)p1.getX(), (int)(p1.getY()+2*w));        
+        Point eight=new Point((int)(p1.getX() +l),(int)(p1.getY()+2*w));
+        Point nine=new Point((int)(p1.getX()+l*2),(int)(p1.getY()+2*w));
+        
+        
+        drawSquare(one, g, length/3, width/3);
+        drawSquare(two,  g, length/3, width/3);
+        drawSquare(three, g, length/3, width/3);
+        drawSquare(four,  g, length/3, width/3);
+       
+        drawSquare(six,  g, length/3, width/3);
+        drawSquare(seven,g, length/3, width/3);
+        drawSquare(eight,  g, length/3, width/3);
+        drawSquare(nine,  g, length/3, width/3);
+       
+        if (x > 1)
+        {
+            squareSubdivide(one, g, x-1, length/3, width/3);
+            squareSubdivide(two, g, x-1, length/3, width/3);
+            squareSubdivide(three, g, x-1,length/3, width/3);
+            squareSubdivide(four,  g, x-1,length/3, width/3);
+            
+            squareSubdivide(six,  g, x-1,length/3, width/3);
+            squareSubdivide(seven,  g, x-1,length/3, width/3);
+            squareSubdivide(eight, g, x-1, length/3, width/3);
+            squareSubdivide(nine, g, x-1, length/3, width/3);
+        }
+    }
+
+    public void drawSquare(Point p1, GraphicsContext g, int l, int w)
+    {   g.setStroke(Color.BLUE);
+        g.setLineWidth(1);
+        int length=l;
+        int width=w;
+        g.fillRect((int)p1.getX()+length, (int)p1.getY()+width, length, width);
+        
+    }
+}
