@@ -1,0 +1,46 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.awt.Point;
+import java.awt.*; 
+import javax.swing.*; 
+
+public class Tree extends Application 
+{
+
+    public static void main(String[] args) 
+    {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Get a canvas to draw on
+        Canvas canvas = new Canvas(1000, 1000);
+        GraphicsContext g = canvas.getGraphicsContext2D();
+
+        drawTree(450, 650, -80, 10, g);
+
+        Group rootPane = new Group();
+        rootPane.getChildren().add(canvas);
+        Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Recursion");
+        primaryStage.show();
+    } 
+
+    public void drawTree(int x, int y, double angle, int length, GraphicsContext g)
+    {   
+        if(length==0) return;
+        int x1 = x + (int) (Math.cos(Math.toRadians(angle)) * length * 10.0);
+        int y1 = y + (int) (Math.sin(Math.toRadians(angle)) * length * 10.0);
+        g.strokeLine(x, y, x1, y1);
+        drawTree(x1, y1, angle - 20, length - 1, g);
+        drawTree(x1, y1, angle + 20, length - 1, g);
+    }  
+}
