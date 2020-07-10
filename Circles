@@ -1,0 +1,60 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.awt.Point;
+import java.awt.*; 
+import javax.swing.*; 
+
+public class RecursiveCircles extends Application 
+{
+
+    public static void main(String[] args) 
+    {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Get a canvas to draw on
+        Canvas canvas = new Canvas(600, 600);
+        GraphicsContext g = canvas.getGraphicsContext2D();
+
+        Point center=new Point(300,300);
+        int radius=300;
+        drawCircle(center, g, radius);
+
+        CircleSubdivide(center,g,radius, 8);
+        //add the canvas to a pane, add pane to a scene, add scence to the stage
+        Group rootPane = new Group();
+        rootPane.getChildren().add(canvas);
+        Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Recursion");
+        primaryStage.show();
+    }
+
+    public void CircleSubdivide(Point center, GraphicsContext g, double radius, int x)
+    {
+        double rad=radius;
+        Point center1= new Point((int)center.getX(), (int)(center.getY() - rad/2));
+        drawCircle(center1, g, radius/2);
+        Point center2=new Point((int)center.getX(), (int)(center.getY() + rad/2));
+        drawCircle(center2, g, radius/2);
+        if (x> 4)
+        {
+            CircleSubdivide(center1, g, radius/2, x-1);
+            CircleSubdivide(center2, g, radius/2, x-1); 
+        }                   
+    }
+
+    public void drawCircle(Point c, GraphicsContext g, double radius)
+    {   g.setStroke(Color.RED);
+        g.setLineWidth(1);
+        g.strokeOval((int)c.getX()-radius, (int)c.getY()-radius, radius*2, radius*2);
+    }  
+}
