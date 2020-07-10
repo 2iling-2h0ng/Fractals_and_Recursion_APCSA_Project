@@ -1,0 +1,85 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.awt.Point;
+import java.awt.*; 
+import javax.swing.*; 
+
+public class Faces extends Application 
+{
+
+    public static void main(String[] args) 
+    {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Get a canvas to draw on
+        Canvas canvas = new Canvas(600, 600);
+        GraphicsContext g = canvas.getGraphicsContext2D();
+
+        Point center=new Point(300,300);
+        int radius=300;
+        drawCircle(center, g, radius);
+        int eyelength=120;
+        drawEyes(eyelength, center, radius, g);
+        drawMouth(center, radius, g);
+        
+        CircleSubdivide(center,g,radius, 8, eyelength);
+        //add the canvas to a pane, add pane to a scene, add scence to the stage
+        Group rootPane = new Group();
+        rootPane.getChildren().add(canvas);
+        Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Recursion");
+        primaryStage.show();
+    }
+
+    public void CircleSubdivide(Point center, GraphicsContext g, double radius, int x, int eyelength)
+    {
+        double rad=radius;
+        Point center1= new Point((int)(center.getX() - rad/2), (int)center.getY());
+        drawCircle(center1, g, radius/2);  
+        drawEyes(eyelength/2, center1, radius/2, g);
+        drawMouth(center1, radius, g);
+        Point center2=new Point((int)(center.getX() +rad/2), (int)center.getY());
+        drawCircle(center2, g, radius/2);
+        drawMouth(center2, radius, g);
+        drawEyes(eyelength/2, center2, radius/2, g);
+        if (x> 6)
+        {
+            CircleSubdivide(center1, g, radius/2, x-1, eyelength/2);
+            CircleSubdivide(center2, g, radius/2, x-1, eyelength/2); 
+        }                   
+    }
+    public void drawEyes(int eyelength, Point center, double radius, GraphicsContext g)
+    {
+        int eye=eyelength;
+        double rad=radius;
+        g.setStroke(Color.BLACK);
+        g.setLineWidth(5);
+        g.strokeOval((int)center.getX()-rad/3, (int)center.getY()-rad/3, 
+                     (int)eyelength/4, (int)eyelength);
+        g.strokeOval((int)center.getX()+rad/3, (int)center.getY()-rad/3, 
+                     (int)eyelength/4, (int)eyelength);            
+    }
+    public void drawMouth(Point c, double radius, GraphicsContext g)
+    {
+        double rad=radius;
+        g.setFill(Color.RED);
+        g.setLineWidth(4);
+        g.fillOval((int)(c.getX()-rad/4), (int)(c.getY()+rad/4), radius/3, radius/6);
+    }
+    public void drawCircle(Point c, GraphicsContext g, double radius)
+    {   g.setStroke(Color.BLUE);
+        g.setLineWidth(1);
+        g.strokeOval((int)c.getX()-radius, (int)c.getY()-radius, radius*2, radius*2);
+
+    }  
+}
