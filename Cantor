@@ -1,0 +1,81 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.awt.Point;
+
+public class Cantor extends Application 
+{
+
+    public static void main(String[] args) 
+    {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Get a canvas to draw on
+        Canvas canvas = new Canvas(300, 300);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        int length=243;
+        int start=1;
+       // int end=start+length-1;
+        int depth=10;
+        
+        //draw a single triangle
+        drawLine(start, length, gc, depth);
+        
+        //Pass in the three points to be subdvided and what
+        //to draw on.
+        //Also pass in how many recusive layers deep to go.
+        cantorSubdivide(start, length,gc,5, depth);
+        
+        //add the canvas to a pane, add pane to a scene, add scence to the stage
+        Group rootPane = new Group();
+        rootPane.getChildren().add(canvas);
+        Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Recursion");
+        primaryStage.show();
+    }
+    
+    
+    
+    
+    
+    //Recieves a value for 8 which indicates how many more 
+    //recursive calls to do
+    public void cantorSubdivide(int st, int length,  
+                                  GraphicsContext g, int x, int depth)
+    {
+        
+                               
+        int midstart = (int)(length/3*2);
+        
+        
+        drawLine(st, length/3, g, depth+10);
+        drawLine(midstart, length/3, g, depth+10);
+        if (x > 1)
+        {
+            final int sav=midstart;
+            
+            cantorSubdivide(st, length/3, g, x-1,depth+10);
+            //The problem here is that midstart now sav is different at this point
+            //so the other half of the set won't print correctly
+            cantorSubdivide(sav, length/3, g, x-1,depth+10);
+            
+        }
+    }
+
+    public void drawLine(int st, int len, GraphicsContext g, int depth)
+    {   g.setStroke(Color.BLUE);
+        g.setLineWidth(3);
+        g.strokeLine((int)st, (int)depth, 
+                     (int)st+len-1, (int)depth);
+        
+    }
+}
