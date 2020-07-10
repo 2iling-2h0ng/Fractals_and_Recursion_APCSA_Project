@@ -29,11 +29,11 @@ public class Sier2 extends Application
         Point p4=new Point(300,0);
         Point p3=new Point(300,300);
 
-        //draw a single square
+        //draw a single square 
         drawSquare(p1, gc,length, width);
 
-        //Pass in the three points to be subdvided and what
-        //to draw on.
+        //Pass in the a point to be subdvided and what
+        //to draw on. Divide square into nine and fill in the middle square
         //Also pass in how many recusive layers deep to go.
         squareSubdivide(p1,gc,3, length, width);
 
